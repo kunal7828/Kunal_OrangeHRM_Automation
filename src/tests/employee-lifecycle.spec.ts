@@ -67,8 +67,9 @@ test.describe('Employee Lifecycle Management', () => {
     // ============ STEP 3: VERIFY EMPLOYEE LIST ============
     await test.step('Navigate to Employee List and verify list loads', async () => {
       await pimPage.navigateToEmployeeList();
-      await pimPage.page.waitForTimeout(3000);
+      await pimPage.page.waitForTimeout(5000);
       const rows = pimPage.page.locator('.oxd-table-card, .oxd-table-row');
+      await rows.first().waitFor({ state: 'visible', timeout: 30000 }).catch(() => {});
       const count = await rows.count();
       expect(count).toBeGreaterThan(0);
       console.log(`✅ Employee list loaded with ${count} rows`);

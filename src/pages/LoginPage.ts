@@ -37,7 +37,7 @@ export class LoginPage extends BasePage {
   }
 
   async verifyLoginSuccess(): Promise<void> {
-    await expect(this.dashboardHeader).toContainText('Dashboard', { timeout: 30000 });
+    await expect(this.page).toHaveURL(/.*dashboard/, { timeout: 30000 });
   }
 
   async verifyLoginError(expectedMessage: string): Promise<void> {

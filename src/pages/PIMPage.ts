@@ -23,23 +23,23 @@ export class PIMPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.pimMenu = page.locator('a[href*="pim"], a:has-text("PIM")').first();
-    this.addEmployeeButton = page.locator('button:has-text("Add"), a:has-text("Add Employee")').first();
-    this.employeeListMenu = page.locator('a[href*="viewEmployeeList"], a:has-text("Employee List")').first();
+    this.pimMenu = page.locator('a[href*="pim"], a:has-text("PIM"), a:has-text("人事信息")').first();
+    this.addEmployeeButton = page.locator('button:has-text("Add"), button:has-text("添加"), a:has-text("Add Employee"), a:has-text("添加员工")').first();
+    this.employeeListMenu = page.locator('a[href*="viewEmployeeList"], a:has-text("Employee List"), a:has-text("员工列表")').first();
     this.firstNameInput = page.locator('input[name="firstName"]');
     this.lastNameInput = page.locator('input[name="lastName"]');
     this.employeeIdInput = page.locator('input[name="employeeId"]').first();
     this.profilePictureInput = page.locator('input[type="file"]');
     this.saveButton = page.locator('button[type="submit"], button.oxd-button--secondary').last();
     this.successMessage = page.locator('.oxd-toast-content-text, .oxd-toast--success').first();
-    this.searchEmployeeIdInput = page.locator('input[placeholder*="Employee"], input[placeholder*="Id"]').first();
+    this.searchEmployeeIdInput = page.locator('input[placeholder*="Employee"], input[placeholder*="Id"], input[placeholder*="员工"], input[placeholder*="工号"]').first();
     this.searchButton = page.locator('button[type="submit"], button.oxd-button--secondary').first();
     this.employeeTable = page.locator('.oxd-table-card, .oxd-table-row');
-    this.editButton = page.locator('button:has(i.bi-pencil-fill), button[title="Edit"]').first();
-    this.jobTitleDropdown = page.locator('//label[text()="Job Title"]/following::div[contains(@class, "oxd-select-text")]').first();
-    this.employmentStatusDropdown = page.locator('//label[text()="Employment Status"]/following::div[contains(@class, "oxd-select-text")]').first();
-    this.deleteButton = page.locator('button:has(i.bi-trash), button[title="Delete"]').first();
-    this.confirmDeleteButton = page.locator('button.oxd-button--label-danger:has-text("Yes, Delete"), button:has-text("Yes, Delete")').first();
+    this.editButton = page.locator('button:has(i.bi-pencil-fill), button[title="Edit"], button[title="编辑"]').first();
+    this.jobTitleDropdown = page.locator('//label[text()="Job Title" or text()="职位"]/following::div[contains(@class, "oxd-select-text")]').first();
+    this.employmentStatusDropdown = page.locator('//label[text()="Employment Status" or text()="雇佣状态"]/following::div[contains(@class, "oxd-select-text")]').first();
+    this.deleteButton = page.locator('button:has(i.bi-trash), button[title="Delete"], button[title="删除"]').first();
+    this.confirmDeleteButton = page.locator('button.oxd-button--label-danger:has-text("Yes, Delete"), button:has-text("Yes, Delete"), button.oxd-button--label-danger:has-text("确认删除"), button:has-text("确认删除"), button:has-text("删除"), button:has-text("是，删除")').first();
   }
 
   async navigateToPIM(): Promise<void> {
@@ -187,18 +187,25 @@ export class PIMPage extends BasePage {
   }
 
   async verifyUpdateSuccess(): Promise<void> {
-    await expect(this.successMessage).toContainText('Successfully Updated', { timeout: 20000 });
+    await expect(this.successMessage).toContainText('Successfully Updated', { timeout: 20000 }).catch(() => 
+      expect(this.successMessage).toContainText('更新成功', { timeout: 20000 })
+    );
   }
 
   async deleteEmployee(): Promise<void> {
-    await this.clickElement(this.deleteButton);
-    await this.waitForElement(this.confirmDeleteButton);
+    // Try to find delete button in the first row, or search for any visible delete button
+    const deleteBtn = this.page.locator('button:has(i.bi-trash), button[title="Delete"], button[title="删除"]').first();
+    await this.waitForElement(deleteBtn, 20000);
+    await this.clickElement(deleteBtn);
+    await this.waitForElement(this.confirmDeleteButton, 10000);
     await this.clickElement(this.confirmDeleteButton);
     await this.page.waitForLoadState('domcontentloaded', { timeout: 30000 });
     await this.page.waitForTimeout(2000);
   }
 
   async verifyDeletionSuccess(): Promise<void> {
-    await expect(this.successMessage).toContainText('Successfully Deleted', { timeout: 20000 });
+    await expect(this.successMessage).toContainText('Successfully Deleted', { timeout: 20000 }).catch(() => 
+      expect(this.successMessage).toContainText('删除成功', { timeout: 20000 })
+    );
   }
 }

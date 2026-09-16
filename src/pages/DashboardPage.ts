@@ -9,8 +9,8 @@ export class DashboardPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this.userDropdown = page.locator('.oxd-userdropdown-tab');
-    this.logoutButton = page.locator('a:has-text("Logout")');
-    this.loginPageHeader = page.locator('h5:has-text("Login")');
+    this.logoutButton = page.locator('a:has-text("Logout"), a:has-text("登出"), a:has-text("退出")');
+    this.loginPageHeader = page.locator('h5:has-text("Login"), h5:has-text("登录")');
   }
 
   async logout(): Promise<void> {
