@@ -1,0 +1,28 @@
+{
+  "validCredentials": {
+    "username": "Admin",
+    "password": "admin123"
+  },
+  "employees": [
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "employeeId": "EMP001",
+      "profilePicture": "test-data/profile.jpg",
+      "jobTitle": "Software Engineer",
+      "employmentStatus": "Full-Time Permanent"
+    },
+    {
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "employeeId": "EMP002",
+      "profilePicture": "test-data/profile.jpg",
+      "jobTitle": "QA Engineer",
+      "employmentStatus": "Full-Time Contract"
+    }
+  ],
+  "updatedEmployee": {
+    "jobTitle": "Senior Software Engineer",
+    "employmentStatus": "Full-Time Permanent"
+  }
+}

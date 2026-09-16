@@ -1,0 +1,12 @@
+node_modules/
+test-results/
+playwright-report/
+videos/
+screenshots/
+*.webm
+.env
+.env.*
+.vscode/
+.idea/
+*.log
+coverage/
